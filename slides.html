@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Search Workshop - Ahrefs</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+    <style>
+        :root {
+            --ahrefs-blue: #4C6EF5;
+            --ahrefs-orange: #FF9500;
+        }
+        .reveal h1, .reveal h2, .reveal h3 {
+            color: var(--ahrefs-blue);
+            text-transform: none;
+        }
+        .reveal .highlight-orange {
+            color: var(--ahrefs-orange);
+        }
+        .reveal .highlight-blue {
+            color: var(--ahrefs-blue);
+        }
+        .reveal section img {
+            border: none;
+            box-shadow: none;
+        }
+        .reveal .small {
+            font-size: 0.7em;
+        }
+        .reveal ul {
+            display: block;
+        }
+        .reveal .two-columns {
+            display: flex;
+            gap: 2em;
+        }
+        .reveal .two-columns > div {
+            flex: 1;
+        }
+        .reveal .icon-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            margin: 0.3em 0;
+        }
+        .reveal .comparison-table {
+            font-size: 0.8em;
+            width: 100%;
+        }
+        .reveal .comparison-table th {
+            background: var(--ahrefs-blue);
+            color: white;
+            padding: 0.5em;
+        }
+        .reveal .comparison-table td {
+            padding: 0.5em;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal .formula {
+            background: #f5f5f5;
+            padding: 1em;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .reveal .diagram {
+            background: #f8f9fa;
+            padding: 1.5em;
+            border-radius: 12px;
+            font-family: monospace;
+            line-height: 1.8;
+        }
+        .slide-number {
+            color: var(--ahrefs-blue) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Slide 1: Title -->
+            <section>
+                <h1>Hybrid Search Workshop</h1>
+                <h3>Building a Smart Flashcard Generator</h3>
+                <p style="margin-top: 2em;">
+                    Learn how modern search engines combine <span class="highlight-blue">keyword matching</span>
+                    and <span class="highlight-orange">semantic understanding</span> to find relevant content.
+                </p>
+                <p class="small" style="margin-top: 3em;">
+                    Hack&Roll 2026 | Ahrefs
+                </p>
+            </section>
+
+            <!-- Slide 2: About Ahrefs -->
+            <section>
+                <img src="Ahrefs-Logo.png" alt="Ahrefs Logo" style="max-width: 300px; margin-bottom: 1em;">
+                <h3>Who We Are</h3>
+                <div class="two-columns" style="text-align: left; font-size: 0.85em;">
+                    <div>
+                        <p><strong>SEO & Marketing Platform</strong></p>
+                        <ul>
+                            <li>Web crawling at scale</li>
+                            <li>Site analysis & auditing</li>
+                            <li>Competitive research</li>
+                            <li>Backlink analysis</li>
+                            <li>Content optimization</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong>Engineering Challenges</strong></p>
+                        <ul>
+                            <li>Petabytes of web data</li>
+                            <li>Billions of pages crawled</li>
+                            <li>Real-time index updates</li>
+                            <li>Reliable & efficient software</li>
+                            <li>OCaml + C++ stack</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 3: About Marc -->
+            <section>
+                <h2>About Me</h2>
+                <div style="text-align: left; max-width: 700px; margin: 0 auto;">
+                    <h3 style="margin-bottom: 0.5em;">Marc Demoustier</h3>
+                    <p><strong>Backend Engineer</strong> @ Ahrefs</p>
+                    <ul style="margin-top: 1em;">
+                        <li>Focus on <span class="highlight-blue">search engine</span> infrastructure</li>
+                        <li>Primary language: <strong>C++</strong></li>
+                        <li>Also working with <strong>OCaml</strong> (company's main language)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Slide 4: What We'll Build -->
+            <section>
+                <h2>What We'll Build Today</h2>
+                <div class="diagram">
+                    <p>📄 Documents → 🔍 Hybrid Search → 🤖 LLM → 📝 Flashcards</p>
+                </div>
+                <div style="text-align: left; margin-top: 1.5em;">
+                    <ol>
+                        <li><strong>Crawl</strong> Wikipedia pages to build a corpus</li>
+                        <li><strong>Index</strong> with BM25 (keywords) + Embeddings (semantic)</li>
+                        <li><strong>Search</strong> using hybrid approach</li>
+                        <li><strong>Generate</strong> flashcards with RAG + LLM</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- Slide 5: The Search Problem -->
+            <section>
+                <h2>The Search Problem</h2>
+                <div class="two-columns" style="font-size: 0.75em; text-align: left;">
+                    <div style="background: #fff3e0; padding: 0.8em; border-radius: 8px;">
+                        <p><strong>Scenario 1</strong></p>
+                        <p>Search: <code>"Singapore economy"</code></p>
+                        <p>Article: <em>"GDP Growth in the Lion City"</em></p>
+                        <p class="highlight-orange">❌ No keyword match!</p>
+                    </div>
+                    <div style="background: #e3f2fd; padding: 0.8em; border-radius: 8px;">
+                        <p><strong>Scenario 2</strong></p>
+                        <p>Search: <code>"BM25 algorithm"</code></p>
+                        <p>Result: generic "search ranking" article</p>
+                        <p class="highlight-blue">❌ Misses specifics!</p>
+                    </div>
+                </div>
+                <p style="margin-top: 0.8em;"><strong>Solution:</strong> Combine both approaches!</p>
+            </section>
+
+            <!-- Slide 6: BM25 - Lexical Search -->
+            <section>
+                <h2>BM25: Lexical Search</h2>
+                <p class="small"><em>Best Matching 25 - The classic approach</em></p>
+                <div style="text-align: left; font-size: 0.75em;">
+                    <ul>
+                        <li><strong>Term Frequency (TF)</strong> - How often does the word appear?</li>
+                        <li><strong>Inverse Document Frequency (IDF)</strong> - How rare is this word?</li>
+                        <li><strong>Document Length</strong> - Normalize for longer documents</li>
+                    </ul>
+                </div>
+                <div class="formula" style="margin-top: 0.5em; font-size: 0.7em;">
+                    score = Σ IDF(term) × (TF × (k₁ + 1)) / (TF + k₁ × (1 - b + b × docLen/avgDocLen))
+                </div>
+                <p class="small" style="margin-top: 0.5em;">Used by Elasticsearch, Apache Solr, and most search engines</p>
+            </section>
+
+            <!-- Slide 7: BM25 Strengths & Weaknesses -->
+            <section>
+                <h2>BM25: Pros & Cons</h2>
+                <div class="two-columns" style="text-align: left;">
+                    <div style="background: #e8f5e9; padding: 1em; border-radius: 8px;">
+                        <p><strong style="color: green;">✓ Strengths</strong></p>
+                        <ul class="small">
+                            <li>Exact keyword matches</li>
+                            <li>Rare terms get boosted</li>
+                            <li>Very fast (no GPU needed)</li>
+                            <li>Interpretable results</li>
+                            <li>No training required</li>
+                        </ul>
+                    </div>
+                    <div style="background: #ffebee; padding: 1em; border-radius: 8px;">
+                        <p><strong style="color: red;">✗ Weaknesses</strong></p>
+                        <ul class="small">
+                            <li>"car" ≠ "automobile"</li>
+                            <li>"Singapore" ≠ "Lion City"</li>
+                            <li>Typos break search</li>
+                            <li>No semantic understanding</li>
+                            <li>Word order ignored</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 8: Semantic Search -->
+            <section>
+                <h2>Semantic Search: Embeddings</h2>
+                <p class="small"><em>Understanding meaning, not just keywords</em></p>
+                <div class="diagram" style="margin: 0.5em 0; font-size: 0.8em; padding: 0.8em;">
+                    <p>"Singapore economy" → [0.23, -0.45, ...] → 384 dims</p>
+                    <p>"Lion City GDP" → [0.21, -0.42, ...] → Similar vector!</p>
+                </div>
+                <div style="text-align: left; font-size: 0.8em;">
+                    <ul>
+                        <li>Neural network encodes text into dense vectors</li>
+                        <li>Similar meanings → Similar vectors</li>
+                        <li>Search = Find nearest neighbors in vector space</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Slide 9: Semantic Search Pros & Cons -->
+            <section>
+                <h2>Semantic Search: Pros & Cons</h2>
+                <div class="two-columns" style="text-align: left;">
+                    <div style="background: #e8f5e9; padding: 1em; border-radius: 8px;">
+                        <p><strong style="color: green;">✓ Strengths</strong></p>
+                        <ul class="small">
+                            <li>Understands synonyms</li>
+                            <li>Handles paraphrases</li>
+                            <li>Intent-based matching</li>
+                            <li>Tolerant to typos</li>
+                            <li>Cross-lingual potential</li>
+                        </ul>
+                    </div>
+                    <div style="background: #ffebee; padding: 1em; border-radius: 8px;">
+                        <p><strong style="color: red;">✗ Weaknesses</strong></p>
+                        <ul class="small">
+                            <li>Slower (needs GPU/CPU)</li>
+                            <li>Less precise for exact terms</li>
+                            <li>Requires embedding model</li>
+                            <li>Results less interpretable</li>
+                            <li>"Black box" behavior</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 10: Hybrid Search -->
+            <section>
+                <h2>Hybrid Search: Best of Both</h2>
+                <div class="diagram" style="font-size: 0.85em; padding: 0.8em;">
+                    Query → BM25 + Semantic → <strong>Fusion</strong> → Final Ranking
+                </div>
+                <div style="text-align: left; margin-top: 0.8em; font-size: 0.85em;">
+                    <p><strong>Reciprocal Rank Fusion (RRF):</strong></p>
+                    <div class="formula" style="font-size: 0.9em;">
+                        RRF_score(doc) = Σ 1 / (k + rank_in_list)
+                    </div>
+                    <p style="margin-top: 0.6em;">Documents ranked highly by <em>both</em> methods get boosted!</p>
+                </div>
+            </section>
+
+            <!-- Slide 11: RAG Overview -->
+            <section>
+                <h2>RAG: Retrieval-Augmented Generation</h2>
+                <p><em>Combining search with LLMs</em></p>
+                <div class="diagram" style="font-size: 0.9em;">
+                    <p>1. <strong>Retrieve</strong> → Search for relevant documents</p>
+                    <p>2. <strong>Augment</strong> → Add context to LLM prompt</p>
+                    <p>3. <strong>Generate</strong> → LLM creates answer with context</p>
+                </div>
+                <div style="text-align: left; margin-top: 1em; font-size: 0.85em;">
+                    <p><strong>Why RAG?</strong></p>
+                    <ul>
+                        <li>LLMs have knowledge cutoff dates</li>
+                        <li>Can hallucinate facts</li>
+                        <li>RAG grounds responses in real data</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Slide 12: Workshop Agenda -->
+            <section>
+                <h2>Workshop Agenda</h2>
+                <div style="text-align: left;">
+                    <ol>
+                        <li><strong>Part 1:</strong> Setup & Introduction</li>
+                        <li><strong>Part 2:</strong> Web Crawling (build our corpus)</li>
+                        <li><strong>Part 3:</strong> BM25 Lexical Search</li>
+                        <li><strong>Part 4:</strong> Semantic Search with Embeddings</li>
+                        <li><strong>Part 5:</strong> Hybrid Search (RRF)</li>
+                        <li><strong>Part 6:</strong> When to Use What</li>
+                        <li><strong>Part 7:</strong> Document Chunking for RAG</li>
+                        <li><strong>Part 8:</strong> LLM-Powered Flashcard Generation</li>
+                        <li><strong>Part 9:</strong> Export to Anki</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- Slide 13: Let's Get Started -->
+            <section>
+                <h1>Let's Build!</h1>
+                <p style="font-size: 1.5em;">Open the notebook and follow along</p>
+                <p class="small" style="margin-top: 2em;">
+                    <code>hybrid_search_workshop.ipynb</code>
+                </p>
+                <div style="margin-top: 2em;">
+                    <img src="Ahrefs-Logo.png" alt="Ahrefs" style="max-width: 150px;">
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            plugins: [ RevealHighlight ]
+        });
+    </script>
+</body>
+</html>
