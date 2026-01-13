@@ -1,5 +1,7 @@
 # Hybrid Search Workshop
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Marc-Demoustier/hybrid_search_hacknroll/blob/main/hybrid_search_workshop.ipynb)
+
 A hands-on workshop exploring how modern search engines combine **lexical** (BM25) and **semantic** (embeddings) search to build powerful hybrid search systems.
 
 **Slides:** [https://marc-demoustier.github.io/hybrid_search_hacknroll/](https://marc-demoustier.github.io/hybrid_search_hacknroll/)
